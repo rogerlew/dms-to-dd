@@ -16,7 +16,7 @@
 
   <script>
     function parseDMS(dms) {
-      const regex = /(\d+)[d°](\d+)'(\d+(?:\.\d+)?)"?([NSEW])/gi;
+      const regex = /(\d+)\s*[d°]\s*(\d+)\s*'\s*(\d+(?:\.\d+)?)\s*"?\s*([NSEW])/gi;
       let result = [];
       let match;
       while ((match = regex.exec(dms)) !== null) {
