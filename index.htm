@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DMS to Decimal Degrees</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f8f8f8; }
+    input, textarea { width: 100%; padding: 0.5em; margin-top: 0.5em; font-size: 1em; }
+    #output { margin-top: 1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>DMS to Decimal Degrees</h2>
+  <textarea id="dmsInput" rows="3" placeholder="Paste DMS string like: 72d29'8.44&quot;W, 36d41'24.91&quot;S"></textarea>
+  <div id="output"></div>
+
+  <script>
+    function parseDMS(dms) {
+      const regex = /(\d+)[d°](\d+)'(\d+(?:\.\d+)?)"?([NSEW])/gi;
+      let result = [];
+      let match;
+      while ((match = regex.exec(dms)) !== null) {
+        let degrees = parseFloat(match[1]);
+        let minutes = parseFloat(match[2]);
+        let seconds = parseFloat(match[3]);
+        let direction = match[4].toUpperCase();
+
+        let dd = degrees + minutes / 60 + seconds / 3600;
+        if (direction === 'S' || direction === 'W') dd *= -1;
+        result.push(dd.toFixed(6));
+      }
+      return result;
+    }
+
+    document.getElementById("dmsInput").addEventListener("input", function () {
+      const val = this.value;
+      try {
+        const dd = parseDMS(val);
+        if (dd.length === 2) {
+          document.getElementById("output").textContent =
+            `Decimal Degrees: ${dd[0]}, ${dd[1]}`;
+        } else {
+          document.getElementById("output").textContent = "Invalid input or missing coordinate.";
+        }
+      } catch (e) {
+        document.getElementById("output").textContent = "Error parsing input.";
+      }
+    });
+  </script>
+</body>
+</html>
